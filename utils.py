@@ -6,10 +6,18 @@ import numpy as np
 import torch
 
 DEFAULT_SEED = 777
+DEFAULT_PARAM_FILE = "params.yml"
+DEFAULT_LOG_DIR = "log"
 
 def load_initialize(yaml_file):
     params = load_params(yaml_file)
     initial_setting(params["main"])
+    return params
+
+def load_from_result(result_dir):
+    yaml_file = os.path.join(result_dir, DEFAULT_PARAM_FILE)
+    params = load_params(yaml_file)
+    initial_setting(params)
     return params
 
 def load_params(param_file):
@@ -17,7 +25,7 @@ def load_params(param_file):
         params = yaml.load(hndl, Loader=yaml.Loader)
     return params
 
-def save_params(params, out_path=None, out_name="params.yml"):
+def save_params(params, out_path=None, out_name=DEFAULT_PARAM_FILE):
     if out_path is None:
         log_dir = params["main"].get("log_dir", "./")
         out_path = os.path.join(log_dir, out_name)
@@ -25,13 +33,15 @@ def save_params(params, out_path=None, out_name="params.yml"):
         yaml.dump(params, hndl)
 
 def initial_setting(main_params):
-    seed = main_params.get("seed", DEFAULT_SEED)
-    is_cuda = main_params.get("cuda", False)
-    deterministic = main_params.get("deterministric", True)
+    log_dir = main_params.get("log_dir", DEFAULT_LOG_DIR)
+    os.makedirs(log_dir, exist_ok=True)
 
+    is_cuda = main_params.get("cuda", False)
     device = "cuda" if (is_cuda and torch.cuda.is_available()) else "cpu"
     main_params["device"] = device 
 
+    seed = main_params.get("seed", DEFAULT_SEED)
+    deterministic = main_params.get("deterministric", True)
     set_seed(seed, device, deterministic)
 
 def set_seed(seed, device, deterministic):

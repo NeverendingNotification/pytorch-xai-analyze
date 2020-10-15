@@ -1,8 +1,8 @@
 main:
-  seed: 0
+  seed: 3
   cuda: False
   batch_size: 32
-  log_dir: "logs/test"
+  log_dir: "logs/fmnist_run3"
   model_name: "model.pth"
   
 data:
@@ -30,12 +30,13 @@ model:
   mlp:
     layer_units: []
   
-
-run:
-  run_type: "train"
+train:
   num_epochs: 30
   grad_accum: 
     accum_type: "step"
     step_ratio: 0.85
     after_step: 10
+
+analyze:
+  num_images: 10
 
