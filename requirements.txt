@@ -7,3 +7,4 @@ torchvision==0.7.0
 alibi==0.5.4
 pytorch-gradcam==0.2.1
 shap==0.36.0
+scikit-image==0.17.2

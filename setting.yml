@@ -2,7 +2,7 @@ main:
   seed: 3
   cuda: False
   batch_size: 32
-  log_dir: "logs/fmnist_run3"
+  log_dir: "logs/fmnist"
   model_name: "model.pth"
   
 data:
