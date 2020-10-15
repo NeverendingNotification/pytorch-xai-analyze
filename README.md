@@ -8,7 +8,6 @@ Current XAI Algorithms
 - SHAP [^2]
 - Grad-CAM[^3]
 
-XAI ()
 
 
 # Instalation
