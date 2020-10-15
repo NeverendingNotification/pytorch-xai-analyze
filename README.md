@@ -2,6 +2,14 @@
 
 pytorch xai scripts to interpret Deep Learning models.
 
+Current XAI Algorithms
+
+- Anchors [^1]
+- SHAP [^2]
+- Grad-CAM[^3]
+
+XAI ()
+
 
 # Instalation
 ```
@@ -27,5 +35,8 @@ analyze and visualize trained model.
 
 
 
+[^1]: https://homes.cs.washington.edu/~marcotcr/aaai18.pdf
+[^2]: https://github.com/slundberg/shap
+[^3]: https://arxiv.org/abs/1610.02391
 
 
