@@ -1,0 +1,41 @@
+main:
+  seed: 0
+  cuda: False
+  batch_size: 32
+  log_dir: "logs/test"
+  model_name: "model.pth"
+  
+data:
+  data_type: "fashion-mnist"
+  path: "data/fashion_mnist"
+  train:
+    augmentation:
+      horizontal:
+        p: 0.5
+      rotation: 
+        degrees: 5
+      resize_crop:
+        size: 28
+        scale: [0.9, 1.0]
+  valid: true
+
+model:
+  feature:
+    mod_type: "conv"
+    c0: 32
+    num_layers: 3
+    norm: "bn"
+  aggregator:
+    agr_type: "gap"
+  mlp:
+    layer_units: []
+  
+
+run:
+  run_type: "train"
+  num_epochs: 30
+  grad_accum: 
+    accum_type: "step"
+    step_ratio: 0.85
+    after_step: 10
+
