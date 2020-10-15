@@ -23,7 +23,7 @@ analyze and visualize trained model.
 ```
  python main.py --mode analyze
 ```
-![sample]([https://neverendingnotification.github.io/images/xai_sample.jpg])
+![sample](https://neverendingnotification.github.io/images/xai_sample.jpg)
 
 
 
