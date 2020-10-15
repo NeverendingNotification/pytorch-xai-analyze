@@ -37,7 +37,7 @@ def analyze_model(main_params, data, model, xai_dirname="xai", algos={}, num_ima
         targ_images = torch.cat([valid_dataset[i][0][None, :] for i in targ_index]).to(device)
 
         with torch.no_grad():
-            probs = nn.Softmax(dim=1)(model(targ_images))
+            probs = nn.Softmax(dim=1)(model(targ_images)).cpu().numpy()
         
         num_algos = 3
         font_size = 16
