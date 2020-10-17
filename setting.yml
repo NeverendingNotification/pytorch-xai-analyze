@@ -1,8 +1,8 @@
 main:
-  seed: 3
-  cuda: False
+  seed: 1
+  cuda: True
   batch_size: 32
-  log_dir: "logs/fmnist"
+  log_dir: "logs/fmnist_default"
   model_name: "model.pth"
   
 data:
@@ -31,7 +31,7 @@ model:
     layer_units: []
   
 train:
-  num_epochs: 30
+  num_epochs: 25
   grad_accum: 
     accum_type: "step"
     step_ratio: 0.85
@@ -39,4 +39,5 @@ train:
 
 analyze:
   num_images: 10
+  gc_mod_name: "feature.1.2"
 

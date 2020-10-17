@@ -14,7 +14,7 @@ from gradcam import GradCAM
 from utils import DEFAULT_LOG_DIR
 from train import VALID_FILE, get_model_path
 
-def analyze_model(main_params, data, model, xai_dirname="xai", algos={}, num_images=10, num_bg_images=100, **kwargs):
+def analyze_model(main_params, data, model, xai_dirname="xai", algos={}, num_images=10, num_bg_images=100, gc_mod_name=None, **kwargs):
     device = main_params.get("device", "cpu")
     log_dir = main_params.get("log_dir", DEFAULT_LOG_DIR)
     img_size = main_params["img_size"]
@@ -31,9 +31,24 @@ def analyze_model(main_params, data, model, xai_dirname="xai", algos={}, num_ima
     class_names = valid_dataset.classes
     bg_images = torch.cat([valid_dataset[i][0][None, :] for i in valid_df.sample(num_bg_images).index]).to(device)
 
+    if gc_mod_name is None:
+        print([k for k , v in model.named_modules()])
+        print("Choose grad-cam module name")
+        gc_mod_name = input()
+
+    for name, modl in model.named_modules():
+        if name == gc_mod_name:
+            gc_targ = modl
+            break
+    else:
+        gc_targ = model.feature
+    print("Grad-Cam target module : ", gc_targ)
+
+    targ_indices = [valid_df[valid_df["true"] == class_].sample(num_images).index for class_ in range(len(class_names))]
+
     for class_ in range(len(class_names)):
         print("Analyzing : ", class_names[class_])
-        targ_index = valid_df[valid_df["true"] == class_].sample(num_images).index
+        targ_index = targ_indices[class_]
         targ_images = torch.cat([valid_dataset[i][0][None, :] for i in targ_index]).to(device)
 
         with torch.no_grad():
@@ -57,7 +72,7 @@ def analyze_model(main_params, data, model, xai_dirname="xai", algos={}, num_ima
         for algo_index, (key, (imgs, ops)) in enumerate({
             "Anchors":analyze_anchors(targ_images, model, probs, device=device),
             "SHAP": analyze_shap(targ_images, model, probs, bg_images=bg_images),
-            "GradCAM":analzye_gradcam(targ_images, model, probs, feature_mod=model.feature[1][-1])
+            "GradCAM": analzye_gradcam(targ_images, model, probs, feature_mod=gc_targ)
         }.items()):
             for i, img in enumerate(imgs):
                 axes[algo_index + 1, i].imshow(img.squeeze(), **ops)
